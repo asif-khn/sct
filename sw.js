@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'static-v3';
+const STATIC_CACHE = 'static-v4';
 const API_CACHE = 'api-v3';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -14,12 +14,13 @@ const EXTERNAL_APIS = [
 ];
 
 // Core assets to cache
-const STATIC_ASSETS = ['/', '/index.html', '/pit.html',
-    '2025/field_image.png','2025/reefscape_config.js','2025\reefscape_pit_scouting.js',
-    'resources/css/style.css', 'resources/js/scoutingApp.js',
-    'resources/js/easy.qrcode.min.js','resources/js/TBAInterface.js',
-    'resources/images/favicon.ico', 'resources/images/field_location_key.png',
-    'resources/fonts/alex.woff','resources/fonts/alexisv3.ttf'];
+const REPO_NAME = '/sct';
+const STATIC_ASSETS = [ `${REPO_NAME}/`, `${REPO_NAME}/index.html`, `${REPO_NAME}/pit.html`,
+    `${REPO_NAME}/2025/field_image.png`,`${REPO_NAME}/2025/reefscape_config.js`,`${REPO_NAME}/2025\reefscape_pit_scouting.js`,
+    `${REPO_NAME}/resources/css/style.css`, `${REPO_NAME}/resources/js/scoutingApp.js`,
+    `${REPO_NAME}/resources/js/easy.qrcode.min.js`,`${REPO_NAME}/resources/js/TBAInterface.js`,
+    `${REPO_NAME}/resources/images/favicon.ico`, `${REPO_NAME}/resources/images/field_location_key.png`,
+    `${REPO_NAME}/resources/fonts/alex.woff`,`${REPO_NAME}/resources/fonts/alexisv3.ttf`];
 
 // ==================== Service Worker Lifecycle Events ====================
 
