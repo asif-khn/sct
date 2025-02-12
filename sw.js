@@ -16,7 +16,7 @@ const EXTERNAL_APIS = [
 // Core assets to cache
 const STATIC_ASSETS = ['/', '/index.html', '/pit.html',
     '2025/field_image.png','2025/reefscape_config.js','2025\reefscape_pit_scouting.js',
-    'resources/css/style.css', 'resources/js/scoutingApp.js', 'resources/js/sw.js',
+    'resources/css/style.css', 'resources/js/scoutingApp.js',
     'resources/js/easy.qrcode.min.js','resources/js/TBAInterface.js',
     'resources/images/favicon.ico', 'resources/images/field_location_key.png',
     'resources/fonts/alex.woff','resources/fonts/alexisv3.ttf'];
