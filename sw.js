@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'static-v4';
+const STATIC_CACHE = 'static-v5';
 const API_CACHE = 'api-v3';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -8,7 +8,7 @@ const EXTERNAL_APIS = [
     origin: 'https://www.thebluealliance.com',
     endpoints: ['/api/v3/event/'],
     headers: {
-      'X-TBA-Auth-Key': 'MCZxxHD0IG2SMFfKU5TbPYrnu9ZxTmOQSHovm4T7nryZo87lZ34CQ9NNYSyUbic2'
+      'X-TBA-Auth-Key': 'MCZ'
     }
   }
 ];
@@ -16,7 +16,7 @@ const EXTERNAL_APIS = [
 // Core assets to cache
 const REPO_NAME = '/sct';
 const STATIC_ASSETS = [ `${REPO_NAME}/`, `${REPO_NAME}/index.html`, `${REPO_NAME}/pit.html`,
-    `${REPO_NAME}/2025/field_image.png`,`${REPO_NAME}/2025/reefscape_config.js`,`${REPO_NAME}/2025\reefscape_pit_scouting.js`,
+    `${REPO_NAME}/2025/field_image.png`,`${REPO_NAME}/2025/reefscape_config.js`,`${REPO_NAME}/2025/reefscape_pit_scouting.js`,
     `${REPO_NAME}/resources/css/style.css`, `${REPO_NAME}/resources/js/scoutingApp.js`,
     `${REPO_NAME}/resources/js/easy.qrcode.min.js`,`${REPO_NAME}/resources/js/TBAInterface.js`,
     `${REPO_NAME}/resources/images/favicon.ico`, `${REPO_NAME}/resources/images/field_location_key.png`,
@@ -80,7 +80,7 @@ async function handleNavigationRequest(event) {
     return networkResponse;
   } catch (error) {
     const cache = await caches.open(STATIC_CACHE);
-    const cachedResponse = await cache.match('/index.html');
+    const cachedResponse = await cache.match('/sct/index.html');
     return cachedResponse || Response.error();
   }
 }
@@ -91,12 +91,12 @@ async function handleStaticAssetRequest(event) {
   
   if (cachedResponse) {
     // Update cache in background
-    fetch(event.request)
-      .then(networkResponse => {
-        if (networkResponse.ok) {
+    fetch(event.request).then(networkResponse => {
+      if (networkResponse.ok && 
+          networkResponse.headers.get('etag') !== cachedResponse.headers.get('etag')) {
           cache.put(event.request, networkResponse.clone());
-        }
-      });
+      }
+  }).catch(() => {/* Silently fail */}); // Safe update
     return cachedResponse;
   }
   
@@ -107,6 +107,14 @@ async function handleApiRequest(event, apiConfig) {
   const cache = await caches.open(API_CACHE);
   const cachedResponse = await cache.match(event.request);
   const cacheTime = await getCacheTime(event.request);
+
+  const newHeaders = new Headers(clonedResponse.headers);
+  newHeaders.append('sw-cache-time', Date.now());
+  const datedResponse = new Response(clonedResponse.body, {
+      headers: newHeaders
+  });
+  cache.put(event.request, datedResponse);  // with timestamp
+
 
   try {
     // Network first strategy with conditional caching
@@ -152,6 +160,21 @@ async function getCacheTime(request) {
   const response = await cache.match(request);
   return response?.headers.get('sw-cache-time') || 0;
 }
+
+// ==================== Cache Version Validation ====================
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.map(key => {
+        const [prefix, version] = key.split('-v');
+        if (prefix === 'static' && parseInt(version) < 5) {
+          return caches.delete(key);
+        }
+        // Similar check for API cache
+      })
+    ))
+  );
+});
 
 // ==================== Cache Maintenance ====================
 
