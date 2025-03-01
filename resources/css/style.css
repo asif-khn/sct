@@ -213,15 +213,23 @@ table {
     width: 100%;
 }
 
+tr {
+    align-items: center;
+}
+
 td {
     padding: 10px 4px;
+}
+
+label {
+    font-family: roboto;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
 }
 
 input {
     font-size: 16px;
     font: roboto;
-    color: black;
-    background-color: white;
 }
 
 .title {
@@ -244,3 +252,49 @@ input {
     font-family:'Lucida Console', 'monospace';
     text-align: justify;
 }
+
+
+/*----------------------------------------*/
+
+.counter-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .counter-btn {
+    --size: 3.5rem;
+    width: var(--size);
+    height: var(--size);
+    border: none;
+    border-radius: 50%;
+    background: #047cf5;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    
+    /* Touch optimization */
+    padding: 0.8rem;
+    touch-action: manipulation;
+  }
+  
+  .counter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    background: #34495e;
+  }
+  
+  .counter-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgb(247, 248, 248);
+  }
+  
+  .count {
+    font-size: 2rem;
+    min-width: 3rem;
+    text-align: center;
+    font-weight: 600;
+    color: #ffffff;
+  }

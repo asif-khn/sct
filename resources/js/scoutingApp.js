@@ -77,7 +77,7 @@ function addTimer(table, idx, name, data) {
   if (data.type != 'cycle') {
     inp.setAttribute("name", data.code);
   }
-  inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
+ // inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
   inp.setAttribute("disabled", "");
   inp.setAttribute("value", 0);
   inp.setAttribute("size", 7);
@@ -142,7 +142,7 @@ function addTimer(table, idx, name, data) {
 function addCounter(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.classList.add("title");
+  cell1.setAttribute("style", "background-color: black; color: white;text-align: right;");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
     return idx + 1;
@@ -158,26 +158,29 @@ function addCounter(table, idx, name, data) {
   button1.setAttribute("type", "button");
   button1.setAttribute("id", "minus_" + data.code);
   button1.setAttribute("onclick", "counter(this.parentElement, -1)");
-  button1.setAttribute("value", "-");
+  button1.setAttribute("value", "<");
+  button1.classList.add("counter-btn", "prev");
   cell2.appendChild(button1);
 
   var inp = document.createElement("input");
   inp.classList.add("counter");
   inp.setAttribute("id", "input_" + data.code);
-  inp.setAttribute("type", "text");
+  //inp.setAttribute("type", "text");
   inp.setAttribute("name", data.code);
   inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
-  inp.setAttribute("disabled", "");
-  inp.setAttribute("value", 0);
+ // inp.setAttribute("disabled", "");
+  //inp.setAttribute("value", 0);
   inp.setAttribute("size", 2);
   inp.setAttribute("maxLength", 2);
+  button1.classList.add("count");
   cell2.appendChild(inp);
 
   var button2 = document.createElement("input");
   button2.setAttribute("type", "button");
   button2.setAttribute("id", "plus_" + data.code);
   button2.setAttribute("onclick", "counter(this.parentElement, 1)");
-  button2.setAttribute("value", "+");
+  button2.setAttribute("value", ">");
+  button2.classList.add("counter-btn", "next");
   cell2.appendChild(button2);
 
   if (data.hasOwnProperty('cycleTimer')) {
